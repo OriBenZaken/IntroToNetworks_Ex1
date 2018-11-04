@@ -14,11 +14,9 @@ def main(argv):
 	with open(ips_file_name)as f:
 		content = f.readlines()
 	# you may also want to remove whitespace characters like `\n` at the end of each line
-	content = [x.strip().replace("\n", "") for x in content]
+	content = [x.strip().replace("\n", "") for x in content if x != '\n']
 	ips_dict = {}
 	for line in content:
-		if line.index(",") < 0:
-			continue
 		url, ip = line.split(",")
 		ips_dict[url.strip()] = ip.strip()
 	my_port = int(argv[0])
@@ -30,7 +28,6 @@ def main(argv):
 	s.bind((source_ip, source_port))
 	while True:
 		url, sender_info = s.recvfrom(2048)
-		print url
 		if (url in ips_dict):
 			ip = ips_dict[url]
 		else:
